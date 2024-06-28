@@ -62,7 +62,7 @@ private:
     }
 
     bool Check_Instruction(char* instructions){
-        bool first = true, second = true, third = true;
+        bool first = false, second = false, third = false;
         for(size_t i = 0; i < 3; i++){
             if(instructions[i] == 'K'){
                 if(first)
@@ -79,7 +79,6 @@ private:
                     return false;
                 third = true;
             }
-            return false;
         }
         return true;
     }
