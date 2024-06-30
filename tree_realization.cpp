@@ -123,6 +123,7 @@ public:
         if(size == 0){
             root = nullptr;
         }
+        delete[] array;
     }
     ~Tree(){
         Destruct_Order(root);
@@ -220,6 +221,7 @@ public:
         size_t size_ = 0;
         Order_Array(node, array, size_);
         Tree<T>* new_tree = new Tree(array, size_);
+        delete[] array;
         return new_tree;
     }
 
@@ -231,7 +233,28 @@ public:
         for(size_t i = 0; i < size; i++){
             array[i] = operation(array[i]);
         }
-        Tree* new_tree = new Tree(array, size);
+        Tree<T>* new_tree = new Tree<T>(array, size);
+        delete[] array;
+        return new_tree;
+    }
+    Tree<T>* Where(bool(*operation)(T)){
+        T* array = Get_Array();
+        size_t count = 0;
+        size_t j = 0;
+        for(size_t i = 0; i < size; i++){
+            if(operation(array[i]))
+                count++;
+        }
+        T* new_array = new T[count];
+        for(size_t i = 0; i < size; i++){
+            if(operation(array[i])) {
+                new_array[j] = array[i];
+                j++;
+            }
+        }
+        Tree<T>* new_tree = new Tree<T>(new_array, count);
+        delete[] array;
+        delete[] new_array;
         return new_tree;
     }
     void Delete(Node* node){

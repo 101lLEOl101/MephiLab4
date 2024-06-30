@@ -8,6 +8,14 @@
 
 using namespace std;
 
+int multiply_by_two(int value){
+    return value * 2;
+}
+
+bool is_more_than_4(int value){
+    return value > 4;
+}
+
 vector<Tree<int>*> array_trees;
 vector<string> array_trees_names;
 bool first = 1;
@@ -53,10 +61,9 @@ void start_interface(){
             cin >> number;
         }
         Tree<int>* now_tree = array_trees[number - 1];
-        cout << *now_tree << "\n";
         number = 0;
-        while(number < 1 || number > 11) {
-            cout << "choose operation:\n1 - Get Size\n2 - Get Root\n3 - Find\n4 - Append\n5 - Delete\n6 - Custom Print\n7 - Get Min\n8 - Get Max\n9 - Merge\n10 - Print by Level\n11 - Sub Tree\n";
+        while(number < 1 || number > 13) {
+            cout << "choose operation:\n1 - Get Size\n2 - Get Root\n3 - Find\n4 - Append\n5 - Delete\n6 - Custom Print\n7 - Get Min\n8 - Get Max\n9 - Merge\n10 - Print by Level\n11 - Sub Tree\n12 - Map(multiply by 2)\n13 - Where(is more than 4)\n";
             cin >> number;
         }
         if(number == 1){
@@ -95,6 +102,7 @@ void start_interface(){
             cin >> instructions;
             now_tree->Custom_Print(cout, instructions);
             cout << '\n';
+            delete[] instructions;
         }
         else if(number == 7){
             cout << now_tree->Get_Min();
@@ -120,6 +128,22 @@ void start_interface(){
             cout << "write value of root node:";
             cin >> number;
             Tree<int>* new_tree = now_tree->Sub_Tree(now_tree->Find(number));
+            string name;
+            cout << "name of new tree:\n";
+            cin >> name;
+            array_trees_names.push_back(name);
+            array_trees.push_back(new_tree);
+        }
+        else if(number == 12){
+            Tree<int>* new_tree = now_tree->Map(multiply_by_two);
+            string name;
+            cout << "name of new tree:\n";
+            cin >> name;
+            array_trees_names.push_back(name);
+            array_trees.push_back(new_tree);
+        }
+        else if(number == 13){
+            Tree<int>* new_tree = now_tree->Where(is_more_than_4);
             string name;
             cout << "name of new tree:\n";
             cin >> name;

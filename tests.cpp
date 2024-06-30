@@ -4,6 +4,14 @@
 #include <assert.h>
 #include <sstream>
 
+double multiply_by_two(double value){
+    return value*2;
+}
+
+bool is_less_than_six(double value){
+    return value<6;
+}
+
 void test(){
     double* arr = new double[7]{1, 5, 6, 1, 24, 5, 3};
     double* sort_arr = new double[7]{1, 1, 3, 5, 5, 6, 24};
@@ -56,6 +64,27 @@ void test(){
         assert(sub_tree_arr[i] == sort_arr[i - 2]);
     }
 
+    Tree<double>* map_tree = tree.Map(multiply_by_two);
+    double* map_tree_arr = map_tree->Get_Array();
+
+    for(int i = 0; i < 7; i++){
+        assert(map_tree_arr[i] == 2 * sort_arr[i]);
+    }
+
+    Tree<double>* where_tree = tree.Where(is_less_than_six);
+    double* where_tree_arr = where_tree->Get_Array();
+    for(int i = 0; i < 7; i++){
+        if(sort_arr[i] >= 6){
+            break;
+        }
+        assert(where_tree_arr[i] == sort_arr[i]);
+    }
+
+    delete sub_tree;
+    delete map_tree;
+    delete where_tree;
+    delete[] where_tree_arr;
+    delete[] map_tree_arr;
     delete[] sub_tree_arr;
     delete[] tree_arr;
     delete[] arr;
