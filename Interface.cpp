@@ -70,7 +70,7 @@ void start_interface(){
             cout << now_tree->Get_Size() << '\n';
         }
         else if(number == 2) {
-            cout << now_tree->Get_Root()->value << "\n";
+            cout << now_tree->Get_Root()->Get_value() << "\n";
         }
         else if(number == 3){
             cout << "write value:";
@@ -79,7 +79,7 @@ void start_interface(){
                 cout << "such value does not exist in the tree\n";
                 start_interface();
             }
-            else cout << now_tree->Find(number)->value <<'\n';
+            else cout << now_tree->Find(number)->Get_value() <<'\n';
         }
         else if(number == 4){
             cout << "write value:";
@@ -102,7 +102,6 @@ void start_interface(){
             cin >> instructions;
             now_tree->Custom_Print(cout, instructions);
             cout << '\n';
-            delete[] instructions;
         }
         else if(number == 7){
             cout << now_tree->Get_Min();

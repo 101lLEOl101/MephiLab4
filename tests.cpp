@@ -33,7 +33,6 @@ void test(){
     assert(tree.Get_Min() == 1);
 
     tree.Delete(tree.Find(1));
-
     assert(tree.Get_Size() == 6);
 
     std::ostringstream out;

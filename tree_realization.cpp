@@ -2,49 +2,57 @@
 //
 // Created by Lenya on 26.06.2024.
 //
+
+template<typename T>
+class Node{
+protected:
+    Node* left;
+    Node* right;
+    Node* parent;
+    T value;
+public:
+    Node(T value_) : value(value_), left(nullptr), right(nullptr), parent(nullptr){}
+    Node* Get_left() const{
+        if(left != nullptr)
+            return left;
+        else throw std::bad_alloc();
+    }
+    Node* Get_parent() const{
+        if(parent != nullptr)
+            return parent;
+        else throw std::bad_alloc();
+    }
+    Node* Get_right() const{
+        if(right != nullptr)
+            return right;
+        else throw std::bad_alloc();
+    }
+    T Get_value() const{
+        return value;
+    }
+
+    template<class U>
+    friend class Tree;
+};
+
 template<typename T>
 class Tree{
 private:
-    struct Node{
-        Node* left;
-        Node* right;
-        Node* parent;
-        T value;
-        explicit Node(T value_) : value(value_), left(nullptr), right(nullptr), parent(nullptr){}
-        Node* Get_left() const{
-            if(left != nullptr)
-                return left;
-            else throw std::invalid_argument("Node haven't left node");
-        }
-        Node* Get_parent() const{
-            if(parent != nullptr)
-                return parent;
-            else throw std::invalid_argument("Node haven't parent node");
-        }
-        Node* Get_right() const{
-            if(right != nullptr)
-                return right;
-            else throw std::invalid_argument("Node haven't right node");
-        }
-        T Get_value() const{
-            return value;
-        }
-    };
-    void Destruct_Order(Node* node){
+    void Destruct_Order(Node<T>* node){
         if(node != nullptr){
             Destruct_Order(node->left);
             Destruct_Order(node->right);
             delete node;
         }
     }
-    void Count_Order(Node* node, size_t& size_){
+    void Count_Order(Node<T>* node, size_t& size_){
         if(node != nullptr){
             Count_Order(node->left, size_);
             Count_Order(node->right, size_);
             size_++;
         }
     }
-    void Order_Print_By_Level(Node* node, std::ostream& out, size_t level) const {
+    void Order_Print_By_Level(Node<T>* node, std::ostream& out, size_t level) const {
         if(node != nullptr){
             Order_Print_By_Level(node->left, out, level+1);
             for(size_t i = 0; i < level; i++){
@@ -54,7 +62,7 @@ private:
             Order_Print_By_Level(node->right, out, level+1);
         }
     }
-    void Custom_Order_Stream_Output(Node* node, std::ostream& out, char* instructions) const{
+    void Custom_Order_Stream_Output(Node<T>* node, std::ostream& out, char* instructions) const{
         if (node != nullptr) {
             for(size_t i = 0; i < 3; i++){
                 if(instructions[i] == 'K'){
@@ -69,8 +77,7 @@ private:
             }
         }
     }
-
-    bool Check_Instruction(char* instructions){
+    bool Check_Instruction(char* instructions) const{
         bool first = false, second = false, third = false;
         for(size_t i = 0; i < 3; i++){
             if(instructions[i] == 'K'){
@@ -91,7 +98,7 @@ private:
         }
         return true;
     }
-    void Order_Array(Node* node, T* array, size_t& i) const{
+    void Order_Array(Node<T>* node, T* array, size_t& i) const{
         if(node != nullptr){
             Order_Array(node->left, array, i);
             array[i] = node->value;
@@ -99,7 +106,7 @@ private:
             Order_Array(node->right, array, i);
         }
     }
-    Node* root;
+    Node<T>* root;
     size_t size;
 
 public:
@@ -127,13 +134,13 @@ public:
     ~Tree(){
         Destruct_Order(root);
     }
-    Node* Get_Root() const{
+    Node<T>* Get_Root() const{
         return root;
     }
     size_t Get_Size() const{
         return size;
     }
-    size_t Get_Count_Sub_Tree(Node* node){
+    size_t Get_Count_Sub_Tree(Node<T>* node){
         size_t size_ = 0;
         Count_Order(node, size_);
         return size_;
@@ -145,7 +152,7 @@ public:
         return array;
     }
     T Get_Max() const{
-        Node* now = root;
+        Node<T>* now = root;
         while (true){
             if(now->right == nullptr){
                 break;
@@ -155,7 +162,7 @@ public:
         return now->value;
     }
     T Get_Min() const{
-        Node* now = root;
+        Node<T>* now = root;
         while (true){
             if(now->left == nullptr){
                 break;
@@ -164,8 +171,8 @@ public:
         }
         return now->value;
     }
-    Node* Find(T value){
-        Node* now = root;
+    Node<T>* Find(T value) const{
+        Node<T>* now = root;
         while(true){
             if(now == nullptr){
                 break;
@@ -187,8 +194,8 @@ public:
             root = new Node(value);
         }
         else{
-            Node* now = root;
-            Node* parent = root;
+            Node<T>* now = root;
+            Node<T>* parent = root;
             while(now != nullptr) {
                 parent = now;
                 if (value > now->value) {
@@ -208,18 +215,18 @@ public:
         }
         size++;
     }
-    void Merge(Tree<T> tree){
+    void Merge(Tree tree){
         T* array = tree.Get_Array();
         for(size_t i = 0; i < tree.size; i++){
             Append(array[i]);
         }
     }
 
-    Tree<T>* Sub_Tree(Node* node){
+    Tree* Sub_Tree(Node<T>* node){
         T* array = new T[Get_Count_Sub_Tree(node)];
         size_t size_ = 0;
         Order_Array(node, array, size_);
-        Tree<T>* new_tree = new Tree(array, size_);
+        Tree* new_tree = new Tree(array, size_);
         delete[] array;
         return new_tree;
     }
@@ -227,16 +234,16 @@ public:
     void Print_Tree_By_Level(std::ostream& out) const {
         Order_Print_By_Level(root, out, 0);
     }
-    Tree<T>* Map(T(*operation)(T)){
+    Tree* Map(T(*operation)(T)){
         T* array = Get_Array();
         for(size_t i = 0; i < size; i++){
             array[i] = operation(array[i]);
         }
-        Tree<T>* new_tree = new Tree<T>(array, size);
+        Tree* new_tree = new Tree(array, size);
         delete[] array;
         return new_tree;
     }
-    Tree<T>* Where(bool(*operation)(T)){
+    Tree* Where(bool(*operation)(T)){
         T* array = Get_Array();
         size_t count = 0;
         size_t j = 0;
@@ -251,12 +258,13 @@ public:
                 j++;
             }
         }
-        Tree<T>* new_tree = new Tree<T>(new_array, count);
+        Tree* new_tree = new Tree
+                (new_array, count);
         delete[] array;
         delete[] new_array;
         return new_tree;
     }
-    void Delete(Node* node){
+    void Delete(Node<T>* node){
         if(node->left == nullptr && node->right == nullptr){
             if(node->parent != nullptr){
                 if(node->parent->right == node){
@@ -306,7 +314,7 @@ public:
             delete node;
         }
         else{
-            Node *now = node->right;
+            Node<T>* now = node->right;
             while (now->left != nullptr) {
                 now = now->left;
             }
@@ -350,9 +358,9 @@ public:
     }
 
     template<typename U>
-    friend std::ostream& operator << (std::ostream& out, Tree<U>& tree);
+    friend std::ostream& operator << (std::ostream& out, Tree& tree);
     template<typename U>
-    friend std::istream& operator >> (std::istream& in, Tree<T>& tree);
+    friend std::istream& operator >> (std::istream& in, Tree& tree);
 };
 
 template<typename T>
