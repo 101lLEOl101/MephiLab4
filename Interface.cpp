@@ -40,6 +40,7 @@ void start_interface(){
         delete[] arr;
     }
     else if(number == 2){
+        number = 0;
         if(array_trees_names.size() == 0){
             cout << "no trees\n";
             start_interface();
@@ -54,8 +55,8 @@ void start_interface(){
         Tree<int>* now_tree = array_trees[number - 1];
         cout << *now_tree << "\n";
         number = 0;
-        while(number < 1 || number > 9) {
-            cout << "choose operation:\n1 - Get Size\n2 - Get Root\n3 - Find\n4 - Append\n5 - Delete\n6 - Custom Print\n7 - Get Min\n8 - Get Max\n9 - Merge\n";
+        while(number < 1 || number > 11) {
+            cout << "choose operation:\n1 - Get Size\n2 - Get Root\n3 - Find\n4 - Append\n5 - Delete\n6 - Custom Print\n7 - Get Min\n8 - Get Max\n9 - Merge\n10 - Print by Level\n11 - Sub Tree\n";
             cin >> number;
         }
         if(number == 1){
@@ -86,7 +87,7 @@ void start_interface(){
                 cout << "such value does not exist in the tree\n";
                 start_interface();
             }
-            now_tree->Delete(number);
+            now_tree->Delete(now_tree->Find(number));
         }
         else if(number == 6){
             cout << "write instructions(example 'KLP', 'LPK'):\n";
@@ -111,6 +112,19 @@ void start_interface(){
             Tree<int> second_tree(array, n);
             now_tree->Merge(second_tree);
             delete[] array;
+        }
+        else if(number == 10){
+            now_tree->Print_Tree_By_Level(cout);
+        }
+        else if(number == 11){
+            cout << "write value of root node:";
+            cin >> number;
+            Tree<int>* new_tree = now_tree->Sub_Tree(now_tree->Find(number));
+            string name;
+            cout << "name of new tree:\n";
+            cin >> name;
+            array_trees_names.push_back(name);
+            array_trees.push_back(new_tree);
         }
         number = 0;
     }

@@ -45,6 +45,16 @@ private:
             size_++;
         }
     }
+    void Order_Print_By_Level(Node* node, std::ostream& out, size_t level) const {
+        if(node != nullptr){
+            Order_Print_By_Level(node->left, out, level+1);
+            for(size_t i = 0; i < level; i++){
+                out << "    ";
+            }
+            out << node->value << "\n";
+            Order_Print_By_Level(node->right, out, level+1);
+        }
+    }
     void Custom_Order_Stream_Output(Node* node, std::ostream& out, char* instructions) const{
         if (node != nullptr) {
             for(size_t i = 0; i < 3; i++){
@@ -213,29 +223,18 @@ public:
         return new_tree;
     }
 
-    void Print_Tree_By_Level() const {
-        if (root == nullptr) return;
-        std::queue<Node*> nodesQueue;
-        nodesQueue.push(root);
-
-        while (!nodesQueue.empty()) {
-            int levelSize = nodesQueue.size();
-            while (levelSize > 0) {
-                Node* node = nodesQueue.front();
-                nodesQueue.pop();
-
-                std::cout << node->value << " ";
-
-                if (node->left != nullptr) nodesQueue.push(node->left);
-                if (node->right != nullptr) nodesQueue.push(node->right);
-
-                levelSize--;
-            }
-            std::cout << std::endl;
-        }
+    void Print_Tree_By_Level(std::ostream& out) const {
+        Order_Print_By_Level(root, out, 0);
     }
-    void Delete(T value){
-        Node* node = Find(value);
+    Tree<T>* Map(T(*operation)(T)){
+        T* array = Get_Array();
+        for(size_t i = 0; i < size; i++){
+            array[i] = operation(array[i]);
+        }
+        Tree* new_tree = new Tree(array, size);
+        return new_tree;
+    }
+    void Delete(Node* node){
         if(node->left == nullptr && node->right == nullptr){
             if(node->parent != nullptr){
                 if(node->parent->right == node){

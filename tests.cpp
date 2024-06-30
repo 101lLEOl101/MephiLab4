@@ -10,7 +10,7 @@ void test(){
     Tree<double> tree(arr, 7);
 
     for(int i = 0; i < 7; i++){
-        tree.Delete(arr[i]);
+        tree.Delete(tree.Find(arr[i]));
     }
     for(int i = 0; i < 7; i++){
         tree.Append(arr[i]);
@@ -24,7 +24,7 @@ void test(){
     assert(tree.Get_Max() == 24);
     assert(tree.Get_Min() == 1);
 
-    tree.Delete(1);
+    tree.Delete(tree.Find(1));
 
     assert(tree.Get_Size() == 6);
 
