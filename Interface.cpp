@@ -63,7 +63,7 @@ void start_interface(){
         Tree<int>* now_tree = array_trees[number - 1];
         number = 0;
         while(number < 1 || number > 13) {
-            cout << "choose operation:\n1 - Get Size\n2 - Get Root\n3 - Find\n4 - Append\n5 - Delete\n6 - Custom Print\n7 - Get Min\n8 - Get Max\n9 - Merge\n10 - Print by Level\n11 - Sub Tree\n12 - Map(multiply by 2)\n13 - Where(is more than 4)\n";
+            cout << "choose operation:\n1 - Get Size\n2 - Get Root\n3 - Find\n4 - Append\n5 - Delete\n6 - Custom Print Array Of Tree\n7 - Get Min\n8 - Get Max\n9 - Merge\n10 - Print by Level\n11 - Sub Tree\n12 - Map(multiply by 2)\n13 - Where(is more than 4)\n";
             cin >> number;
         }
         if(number == 1){
@@ -100,7 +100,7 @@ void start_interface(){
             cout << "write instructions(example 'KLP', 'LPK'):\n";
             char* instructions = new char[3];
             cin >> instructions;
-            now_tree->Custom_Print(cout, instructions);
+            now_tree->Custom_Print_Array_Of_Tree(cout, instructions);
             cout << '\n';
         }
         else if(number == 7){

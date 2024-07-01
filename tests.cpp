@@ -36,7 +36,7 @@ void test(){
     assert(tree.Get_Size() == 6);
 
     std::ostringstream out;
-    tree.Custom_Print(out, "LKP");
+    tree.Custom_Print_Array_Of_Tree(out, "LKP");
 
     assert(out.str() == "1 3 5 5 6 24 ");
 

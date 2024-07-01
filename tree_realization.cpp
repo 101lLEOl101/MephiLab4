@@ -230,10 +230,6 @@ public:
         delete[] array;
         return new_tree;
     }
-
-    void Print_Tree_By_Level(std::ostream& out) const {
-        Order_Print_By_Level(root, out, 0);
-    }
     Tree* Map(T(*operation)(T)){
         T* array = Get_Array();
         for(size_t i = 0; i < size; i++){
@@ -347,8 +343,7 @@ public:
         }
         size--;
     }
-
-    void Custom_Print(std::ostream& out, char* instructions){
+    void Custom_Print_Array_Of_Tree(std::ostream& out, char* instructions){
         if(Check_Instruction(instructions)){
             Custom_Order_Stream_Output(root, out, instructions);
         }
@@ -356,7 +351,9 @@ public:
             throw std::invalid_argument("Invalid instructions");
         }
     }
-
+    void Print_Tree_By_Level(std::ostream& out) const {
+        Order_Print_By_Level(root, out, 0);
+    }
     template<typename U>
     friend std::ostream& operator << (std::ostream& out, Tree& tree);
     template<typename U>
