@@ -8,15 +8,15 @@
 
 using namespace std;
 
-int multiply_by_two(int value){
+double multiply_by_two_interface(double value){
     return value * 2;
 }
 
-bool is_more_than_4(int value){
+bool is_more_than_4(double value){
     return value > 4;
 }
 
-vector<Tree<int>*> array_trees;
+vector<Tree<double>*> array_trees;
 vector<string> array_trees_names;
 bool first = 1;
 int number = 0;
@@ -34,12 +34,12 @@ void start_interface(){
         int n;
         cout << "write size:\n";
         cin >> n;
-        int* arr = new int[n];
+        double* arr = new double[n];
         cout << "write elements:\n";
         for(int i = 0; i < n; i++){
             cin >> arr[i];
         }
-        Tree<int>* new_tree = new Tree<int>(arr, n);
+        Tree<double>* new_tree = new Tree<double>(arr, n);
         array_trees.push_back(new_tree);
         string name;
         cout << "name:\n";
@@ -60,7 +60,7 @@ void start_interface(){
             }
             cin >> number;
         }
-        Tree<int>* now_tree = array_trees[number - 1];
+        Tree<double>* now_tree = array_trees[number - 1];
         number = 0;
         while(number < 1 || number > 13) {
             cout << "choose operation:\n1 - Get Size\n2 - Get Root\n3 - Find\n4 - Append\n5 - Delete\n6 - Custom Print Array Of Tree\n7 - Get Min\n8 - Get Max\n9 - Merge\n10 - Print by Level\n11 - Sub Tree\n12 - Map(multiply by 2)\n13 - Where(is more than 4)\n";
@@ -74,27 +74,30 @@ void start_interface(){
         }
         else if(number == 3){
             cout << "write value:";
-            cin >> number;
-            if(now_tree->Find(number) == nullptr){
+            double value;
+            cin >> value;
+            if(now_tree->Find(value) == nullptr){
                 cout << "such value does not exist in the tree\n";
                 start_interface();
             }
-            else cout << now_tree->Find(number)->Get_value() <<'\n';
+            else cout << now_tree->Find(value)->Get_value() <<'\n';
         }
         else if(number == 4){
             cout << "write value:";
-            cin >> number;
-            now_tree->Append(number);
+            double value;
+            cin >> value;
+            now_tree->Append(value);
             cout << '\n';
         }
         else if(number == 5){
             cout << "write value of delete node:";
-            cin >> number;
-            if(now_tree->Find(number) == nullptr){
+            double value;
+            cin >> value;
+            if(now_tree->Find(value) == nullptr){
                 cout << "such value does not exist in the tree\n";
                 start_interface();
             }
-            now_tree->Delete(now_tree->Find(number));
+            now_tree->Delete(now_tree->Find(value));
         }
         else if(number == 6){
             cout << "write instructions(example 'KLP', 'LPK'):\n";
@@ -112,11 +115,11 @@ void start_interface(){
         else if(number == 9){
             int n;
             cin >> n;
-            int* array = new int[n];
+            double * array = new double[n];
             for(int i = 0; i < n; i++){
                 cin >> array[i];
             }
-            Tree<int> second_tree(array, n);
+            Tree<double> second_tree(array, n);
             now_tree->Merge(second_tree);
             delete[] array;
         }
@@ -126,7 +129,7 @@ void start_interface(){
         else if(number == 11){
             cout << "write value of root node:";
             cin >> number;
-            Tree<int>* new_tree = now_tree->Sub_Tree(now_tree->Find(number));
+            Tree<double>* new_tree = now_tree->Sub_Tree(now_tree->Find(number));
             string name;
             cout << "name of new tree:\n";
             cin >> name;
@@ -134,7 +137,7 @@ void start_interface(){
             array_trees.push_back(new_tree);
         }
         else if(number == 12){
-            Tree<int>* new_tree = now_tree->Map(multiply_by_two);
+            Tree<double>* new_tree = now_tree->Map(multiply_by_two_interface);
             string name;
             cout << "name of new tree:\n";
             cin >> name;
@@ -142,7 +145,7 @@ void start_interface(){
             array_trees.push_back(new_tree);
         }
         else if(number == 13){
-            Tree<int>* new_tree = now_tree->Where(is_more_than_4);
+            Tree<double>* new_tree = now_tree->Where(is_more_than_4);
             string name;
             cout << "name of new tree:\n";
             cin >> name;

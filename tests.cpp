@@ -23,6 +23,8 @@ void test(){
     for(int i = 0; i < 7; i++){
         tree.Append(arr[i]);
     }
+    tree.Delete(tree.Find(1))->Delete(tree.Find(5))->Delete(tree.Find(6))->Delete(tree.Find(1))->Delete(tree.Find(24))->Delete(tree.Find(5))->Delete(tree.Find(3));
+    tree.Append(1)->Append(5)->Append(6)->Append(1)->Append(24)->Append(5)->Append(3);
 
     assert(tree.Get_Root()->Get_value() == 1);
     assert(tree.Get_Root()->Get_left()->Get_value() == 1);

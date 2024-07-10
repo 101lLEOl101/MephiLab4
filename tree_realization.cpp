@@ -33,33 +33,47 @@ public:
 
     template<class U>
     friend class Tree;
+    template<typename U>
+    friend std::ostream& operator << (std::ostream& out, Node& node);
+    template<typename U>
+    friend std::istream& operator >> (std::istream& in, Node& node);
 };
+template<typename T>
+std::ostream& operator << (std::ostream& out, Node<T>& node){
+    out << node.Get_value();
+    return out;
+}
+template<typename T>
+std::istream& operator >> (std::istream& in, Node<T>& node){
+    in >> node.value;
+    return in;
+}
 
 template<typename T>
 class Tree{
 private:
-    void Destruct_Order(Node<T>* node){
+    void Destructor_Traversal(Node<T>* node){
         if(node != nullptr){
-            Destruct_Order(node->left);
-            Destruct_Order(node->right);
+            Destructor_Traversal(node->left);
+            Destructor_Traversal(node->right);
             delete node;
         }
     }
-    void Count_Order(Node<T>* node, size_t& size_){
+    void Count_Nodes_In_Sub_Tree_Traversal(Node<T>* node, size_t& size_){
         if(node != nullptr){
-            Count_Order(node->left, size_);
-            Count_Order(node->right, size_);
+            Count_Nodes_In_Sub_Tree_Traversal(node->left, size_);
+            Count_Nodes_In_Sub_Tree_Traversal(node->right, size_);
             size_++;
         }
     }
-    void Order_Print_By_Level(Node<T>* node, std::ostream& out, size_t level) const {
+    void Traversal_Print_By_Level(Node<T>* node, std::ostream& out, size_t level) const {
         if(node != nullptr){
-            Order_Print_By_Level(node->left, out, level+1);
+            Traversal_Print_By_Level(node->left, out, level+1);
             for(size_t i = 0; i < level; i++){
                 out << "    ";
             }
             out << node->value << "\n";
-            Order_Print_By_Level(node->right, out, level+1);
+            Traversal_Print_By_Level(node->right, out, level+1);
         }
     }
     void Custom_Order_Stream_Output(Node<T>* node, std::ostream& out, char* instructions) const{
@@ -98,12 +112,12 @@ private:
         }
         return true;
     }
-    void Order_Array(Node<T>* node, T* array, size_t& i) const{
+    void Traversal_Array(Node<T>* node, T* array, size_t& i) const{
         if(node != nullptr){
-            Order_Array(node->left, array, i);
+            Traversal_Array(node->left, array, i);
             array[i] = node->value;
             i++;
-            Order_Array(node->right, array, i);
+            Traversal_Array(node->right, array, i);
         }
     }
     Node<T>* root;
@@ -132,7 +146,7 @@ public:
         delete[] array;
     }
     ~Tree(){
-        Destruct_Order(root);
+        Destructor_Traversal(root);
     }
     Node<T>* Get_Root() const{
         return root;
@@ -140,15 +154,15 @@ public:
     size_t Get_Size() const{
         return size;
     }
-    size_t Get_Count_Sub_Tree(Node<T>* node){
+    size_t Get_Count_Nodes_In_Sub_Tree(Node<T>* node){
         size_t size_ = 0;
-        Count_Order(node, size_);
+        Count_Nodes_In_Sub_Tree_Traversal(node, size_);
         return size_;
     }
     T* Get_Array() const{
         T* array = new T[size];
         size_t i = 0;
-        Order_Array(root, array, i);
+        Traversal_Array(root, array, i);
         return array;
     }
     T Get_Max() const{
@@ -189,7 +203,7 @@ public:
         }
         return nullptr;
     }
-    void Append(T value){
+    Tree* Append(T value){
         if(size == 0){
             root = new Node(value);
         }
@@ -214,18 +228,20 @@ public:
             }
         }
         size++;
+        return this;
     }
-    void Merge(Tree tree){
+    Tree* Merge(Tree tree){
         T* array = tree.Get_Array();
         for(size_t i = 0; i < tree.size; i++){
             Append(array[i]);
         }
+        return this;
     }
 
     Tree* Sub_Tree(Node<T>* node){
-        T* array = new T[Get_Count_Sub_Tree(node)];
+        T* array = new T[Get_Count_Nodes_In_Sub_Tree(node)];
         size_t size_ = 0;
-        Order_Array(node, array, size_);
+        Traversal_Array(node, array, size_);
         Tree* new_tree = new Tree(array, size_);
         delete[] array;
         return new_tree;
@@ -260,7 +276,10 @@ public:
         delete[] new_array;
         return new_tree;
     }
-    void Delete(Node<T>* node){
+    Tree* Delete(Node<T>* node){
+        if(node == nullptr){
+            throw std::bad_alloc();
+        }
         if(node->left == nullptr && node->right == nullptr){
             if(node->parent != nullptr){
                 if(node->parent->right == node){
@@ -342,6 +361,7 @@ public:
             }
         }
         size--;
+        return this;
     }
     void Custom_Print_Array_Of_Tree(std::ostream& out, char* instructions){
         if(Check_Instruction(instructions)){
@@ -352,7 +372,7 @@ public:
         }
     }
     void Print_Tree_By_Level(std::ostream& out) const {
-        Order_Print_By_Level(root, out, 0);
+        Traversal_Print_By_Level(root, out, 0);
     }
     template<typename U>
     friend std::ostream& operator << (std::ostream& out, Tree& tree);
